@@ -12,7 +12,8 @@ import (
 )
 
 type conf struct {
-	Token string
+	Token    string `json:"token"`
+	Endpoint string `json:"endpoint,omitempty"`
 }
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 	ghcal.GithubToken = c.Token
+	ghcal.GithubEndpoint = c.Endpoint
 
 	if len(os.Args) < 2 {
 		log.Fatal("org or org/repo required.")

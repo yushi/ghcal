@@ -2,6 +2,7 @@ package ghcal
 
 import (
 	"log"
+	"net/url"
 	"strings"
 	"time"
 
@@ -17,13 +18,21 @@ type Commit struct {
 	Committer  string
 }
 
-var GithubToken string
+var (
+	GithubToken    string
+	GithubEndpoint string
+)
 
 func getGithubClient() *github.Client {
 	t := &oauth.Transport{
 		Token: &oauth.Token{AccessToken: GithubToken},
 	}
-	return github.NewClient(t.Client())
+
+	c := github.NewClient(t.Client())
+	if GithubEndpoint != "" {
+		c.BaseURL, _ = url.Parse(GithubEndpoint)
+	}
+	return c
 }
 func getGithubOrgRepos(org string) ([]string, error) {
 	client := getGithubClient()
